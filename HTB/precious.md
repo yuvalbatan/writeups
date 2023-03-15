@@ -44,9 +44,9 @@ exiftool 68ci7ek2mcv3lsdmyup77rgd2gbv1e3d.pdf
 
 ![image](https://user-images.githubusercontent.com/114166939/225317837-a4bbd9a8-b25f-4836-9c7c-d0ed7f6c8f1e.png)
 
-The creator of this file called "pdfkit v0.8.6", that's the tool the server use to make the pdf files.
+The creator of this file called "pdfkit v0.8.6", that's the service the server use to make the pdf files.
 
-There is a known command injection exploit on this tool - i'll use an exploit from this website: https://security.snyk.io/vuln/SNYK-RUBY-PDFKIT-2869795
+There is a known command injection exploit on this service - i'll use an exploit from this website: https://security.snyk.io/vuln/SNYK-RUBY-PDFKIT-2869795
 
 ![image](https://user-images.githubusercontent.com/114166939/225319623-001804a0-bbe6-4673-8018-1baf4dd043e2.png)
 
