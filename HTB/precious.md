@@ -26,7 +26,7 @@ Now the website appears!
 
 The edit text does'nt getting any remote url, so i'll try a local one.
 
-I'll open an python3 web server on my machine.
+I'll open a python3 web server on my machine.
 ```bash
 python3 -m http.server
 ```
