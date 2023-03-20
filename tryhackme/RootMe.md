@@ -164,15 +164,17 @@ I'm going to use php code for reverse shell by "https://pentestmonkey.net/":
 
   ?> 
 ```
-I changed the IP and port and called this file "reverse.php" and now im going to upload it on the panel:
+I changed the IP and port and called this file "reverse.php" and now I'm going to upload it to the panel:
 
 ![image](https://user-images.githubusercontent.com/114166939/226318268-7abbee05-bc19-4640-a7e6-d93bb8649fbc.png)
 
-It detected the file, so after some research i found this page: "https://vulp3cula.gitbook.io/hackers-grimoire/exploitation/web-application/file-upload-bypass", i'll change the file name to:"reverse.php5" and let's try again!
+It detected and blocked the file, so to pass this validation  I found this page: "https://vulp3cula.gitbook.io/hackers-grimoire/exploitation/web-application/file-upload-bypass".
+
+So I'll change the file name to:"reverse.php5" and let's try again!
 
 ![image](https://user-images.githubusercontent.com/114166939/226319215-cea89063-2462-4d5e-84cc-da804415d50a.png)
 
-Now i can found the upload at "/uploads" directory.
+Now i can find the upload at "/uploads" directory.
 
 ![image](https://user-images.githubusercontent.com/114166939/226319479-90a95ccd-e8cc-4049-b199-6c976cfe0823.png)
 
@@ -192,7 +194,7 @@ Now, I can find the user.txt flag which stored at "/var/www":
 
 To find the root.txt flag, I need to find a way to escalate my privileges and become the root user.
 
-I'm gojng to search for SUID files with the command:
+I'm going to search for SUID files with the command:
 ```bash
 find / -user root -perm /4000 2>/dev/null
 ```
@@ -201,6 +203,7 @@ One of the most suspicious files in the output is "/usr/bin/python"
 ![image](https://user-images.githubusercontent.com/114166939/226321712-c3ab1b4b-fc18-4686-a623-a14eba96850d.png)
 
 I'll search for a vulnerability for SUID binary python file on "https://gtfobins.github.io/".
+
 Found the following command:
 ```bash
 ./python -c 'import os; os.execl("/bin/sh", "sh", "-p")'
