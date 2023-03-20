@@ -212,6 +212,6 @@ I'll enter to "/usr/bin" and run this command:
 
 ![image](https://user-images.githubusercontent.com/114166939/226322547-13b6e186-2cc7-4be9-ba31-3a1e2a3f4677.png)
 
-Now all left to do is enter to the root directory and print the root.txt flag:
+Now all we need to do is enter the root directory and print the root.txt flag:
 
 ![image](https://user-images.githubusercontent.com/114166939/226325201-fd09f234-be21-4c33-8550-fcb9125bcb99.png)
