@@ -34,7 +34,8 @@ The second file is the first key to this challenge:
 
 ![image](https://user-images.githubusercontent.com/114166939/228570023-7ef747ea-a3dd-4c07-b01b-1bea32d38a0d.png)
 
-Next, there is a directory called "wp-login" which means that this website built with WordPress.
+Next, I found a directory called "wp-login" which means that this website built with WordPress.
+
 I'll go over this directory and try to see how the page will react with wrong credentials:
 
 ![image](https://user-images.githubusercontent.com/114166939/228571802-3911254d-038d-4aa2-b28a-4013ed53ef05.png)
@@ -81,6 +82,7 @@ Let's try to edit a plugin:
 ![image](https://user-images.githubusercontent.com/114166939/228584166-f2b68ef8-dbc3-4c49-995f-4f7d7f513584.png)
 
 I'll select "WPtouch Mobile Plugin" and "wptouch/core/admin-render.php".
+
 There is an "update file" option on this plugin and it's written in php:
 
 ![image](https://user-images.githubusercontent.com/114166939/228585503-2f5ce6ec-796c-4912-9168-c67c57a39246.png)
@@ -240,25 +242,34 @@ I'll use Pentestmonkey's reverse shell:
 ```
 
 Chnaged the IP and the port, paste it as a plugin and clicked "update file".
+
 Now, all left to do is open net-cat listener on port 6666:
 ```bash
-nc -lnvp 7777
+nc -lnvp 6666
 ```
 And get to the url of this plugin so it'll run.
+
 url: "http://10.10.244.187/wp-content/plugins/wptouch/core/admin-render.php"
 
 Got a reverse shell!
+
 
 ![image](https://user-images.githubusercontent.com/114166939/228589671-c0e74779-633f-4ade-8ac4-5600fd9ffb52.png)
 
 The only user on the machine is "robot", on it's home directory there are 2 files:
 
+
 ![image](https://user-images.githubusercontent.com/114166939/228590538-c02b7d45-2b59-4108-bddd-16073b870492.png)
 
-I have permissions to read the "password.raw-md5"
+
+I have permissions to read the "password.raw-md5" file.
+
+
 ![image](https://user-images.githubusercontent.com/114166939/228590859-40e78f10-4bbc-4ff0-a7c2-88d5c8330483.png)
 
+
 This is the robot's user credentials!
+
 The password is md5 hash, I'll use "https://hashes.com/en/decrypt/hash" rainbow tables to find out what is the password:
 
 ![image](https://user-images.githubusercontent.com/114166939/228591705-87a63708-9732-4a8a-a428-cb2ef12026b9.png)
@@ -289,8 +300,8 @@ There is a Sudo option which redirect to the following bash commands:
 
 ![image](https://user-images.githubusercontent.com/114166939/228595416-d9c7616f-de6a-45ec-a1d2-a1e607909e81.png)
 
-Before I'll try it on the machine I need to change it because "robot" user does'nt have 
-sudo premissions to this file I'll use the commands:
+Before I'll try the commands on the machine I need to change it, thats because "robot" user does'nt have 
+sudo premissions so I'll use the commands:
 ```bash
 /usr/local/bin/nmap --interactive
 !sh
