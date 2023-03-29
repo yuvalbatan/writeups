@@ -1,4 +1,7 @@
 # RootMe - THM
+###  Difficulty level: Easy
+------------------------------------------------------
+
 
 I'll start by running nmap scan:
 ```bash
