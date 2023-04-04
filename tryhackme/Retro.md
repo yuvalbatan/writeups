@@ -125,10 +125,13 @@ and run it.
 
 One of the many vulnerabilities it found is "CVE-2017-0213"!
 
+
 This CVE exploit the kernel and grant NT-AUTHORITY permissions.
 
 I found a github page with this exploit "https://github.com/SecWiki/windows-kernel-exploits/tree/master/CVE-2017-0213",
+
 Download to my machine the "CVE-2017-0213_x64.zip", unzip it, and now I'll upload it to the victim machine as I did before, with python3 server.
+
 
 I'll run the file from the cmd:
 ```cmd
