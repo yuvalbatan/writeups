@@ -124,6 +124,7 @@ I'll open "Google chrome" and run "http://10.14.50.11:8000/winPEASx64.exe", down
 and run it.
 
 One of the many vulnerabilities it found is "CVE-2017-0213"!
+
 This CVE exploit the kernel and grant NT-AUTHORITY permissions.
 
 I found a github page with this exploit "https://github.com/SecWiki/windows-kernel-exploits/tree/master/CVE-2017-0213",
