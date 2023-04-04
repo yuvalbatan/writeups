@@ -115,7 +115,7 @@ Wade is a weak user I'll try privilege escalation.
 
 For that I'll need winPEASx64.exe from "https://github.com/carlospolop/PEASS-ng/releases/tag/20230402".
 
-Next, I'll run a python3 server to download it on my victim machine:
+Next, I'll run a python3 server to download it on the victim machine:
 ```python3
 python3 -m http.server
 ```
