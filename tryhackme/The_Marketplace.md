@@ -162,7 +162,7 @@ Now let's click on the system user:
 
 ![image](https://user-images.githubusercontent.com/114166939/232117026-e9513b4c-5bad-4362-85f8-a80c7f2c56c1.png)
 
-This page use GET method and it and maybe it's vulnerable to sqli in the "user" parameter - "http://10.10.171.31/admin?user=1".
+This page use GET method and maybe vulnerable to sqli in the "user" parameter - "http://10.10.171.31/admin?user=1".
 
 The easiest way to test the url is to add ' and check its response:
 ```url
