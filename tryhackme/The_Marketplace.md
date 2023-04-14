@@ -70,5 +70,27 @@ So the server probably identify the users by "userId" and "username" parameters.
 This information will be important in the near future!
 Let's move on to the New listing ("http://10.10.171.31/new") page:
 
+![image](https://user-images.githubusercontent.com/114166939/232100022-ae881109-485a-4a4f-8020-d827fb8569c4.png)
 
+I'll try exploit this page with xss payloads,
+For beginning I'll try the simplest in the title:
+```html
+<script>alert(1)</script>
+```
+Didn't work:
 
+![image](https://user-images.githubusercontent.com/114166939/232100940-7a66c85d-2dbd-4908-b04c-aad6c5327ceb.png)
+
+Let's try the description:
+
+![image](https://user-images.githubusercontent.com/114166939/232101091-70b6a894-ece1-420a-a82d-63718944d837.png)
+
+It works!
+
+![image](https://user-images.githubusercontent.com/114166939/232101158-1cf33e18-0bbb-4ecc-bc20-45d2601fb543.png)
+
+Also when I'm going to the home page and clicking on this listing the alert pops out.
+It is a reflected and stored xss!
+
+The 2 options for this listing are: "Contact the listing author" and 
+"Report listing to admins" - when I report the listing 
