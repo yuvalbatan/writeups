@@ -36,7 +36,9 @@ It's forbidden:
 ![image](https://user-images.githubusercontent.com/114166939/232095591-266d7b01-2bd2-40a0-a63f-16d0f62c2655.png)
 
 I'll sign up with a test account:
+
 username = test
+
 password = test
 
 ![image](https://user-images.githubusercontent.com/114166939/232096934-f68dfe06-c1d5-490a-b58b-ab601e0f38af.png)
