@@ -161,5 +161,18 @@ Now let's click on the system user:
 
 This page use GET method and it and maybe it's vulnerable to sqli in the "user" parameter - "http://10.10.171.31/admin?user=1".
 
+The easiest way to test the url is to add ' and check its response:
+```url
+http://10.10.171.31/admin?user=1'
+```
 
+![image](https://user-images.githubusercontent.com/114166939/232117835-abc95af0-4082-4703-929a-afa263519e99.png)
 
+It's probably vulnerable, also it written that this website use MySQL server!
+
+Let's try find out how much columns are in the tables of this DataBase with SQL injection to the url:
+```url
+http://10.10.171.31/admin?user=1 order by 1-- -
+```
+
+It responded the same, than I'll increase the column numbers until the website will response differently:
