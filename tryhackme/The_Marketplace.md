@@ -70,6 +70,7 @@ By using CyberChef (from "https://gchq.github.io/CyberChef/") I can understand w
 So the server probably identify the users by "userId" and "username" parameters.
 
 This information will be important in the near future!
+
 Let's move on to the New listing ("http://10.10.171.31/new") page:
 
 ![image](https://user-images.githubusercontent.com/114166939/232100022-ae881109-485a-4a4f-8020-d827fb8569c4.png)
