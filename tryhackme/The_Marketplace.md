@@ -26,3 +26,49 @@ PORT      STATE SERVICE VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 The SSH version is high enough to not be vulnerable, so I'll start with the http service.
+
+In the scan it also found that in the robots.txt directory there is an "/admin" directory.
+
+![image](https://user-images.githubusercontent.com/114166939/232095399-3b9e8fbb-7b3c-458f-8a36-1401c960d4cb.png)
+
+It's forbidden:
+
+![image](https://user-images.githubusercontent.com/114166939/232095591-266d7b01-2bd2-40a0-a63f-16d0f62c2655.png)
+
+I'll sign up with a test account:
+username = test
+password = test
+
+![image](https://user-images.githubusercontent.com/114166939/232096934-f68dfe06-c1d5-490a-b58b-ab601e0f38af.png)
+
+Success!
+
+Now let's login to this user:
+Success!
+
+![image](https://user-images.githubusercontent.com/114166939/232097504-f3174c72-dcdc-46f5-b534-c4b3c167054a.png)
+
+Also noticed I have cookie now - using the cookie manager firefox extension.
+
+![image](https://user-images.githubusercontent.com/114166939/232098050-972050bf-9921-4b3d-b38a-9164f17e2832.png)
+
+By using CyberChef (from "https://gchq.github.io/CyberChef/") I can understand what type of encode this server use and what is the data stored in the cookie.
+
+![image](https://user-images.githubusercontent.com/114166939/232099019-3d27ee92-fea8-4aaa-9126-7386e1e678bc.png)
+
+```
+{
+    "userId": 4,
+    "username": "test",
+    "admin": false,
+    "iat": 1681488332
+}
+```
+
+So the server probably identify the users by "userId" and "username" parameters.
+
+This information will be important in the near future!
+Let's move on to the New listing ("http://10.10.171.31/new") page:
+
+
+
