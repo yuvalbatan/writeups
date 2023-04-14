@@ -37,7 +37,8 @@ It's forbidden:
 
 I'll sign up with a test account:
 
-username = test
+username = test,
+
 password = test
 
 ![image](https://user-images.githubusercontent.com/114166939/232096934-f68dfe06-c1d5-490a-b58b-ab601e0f38af.png)
