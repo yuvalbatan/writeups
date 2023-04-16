@@ -7,6 +7,7 @@ I'll start by running nmap scan:
 nmap -sV -sC 10.10.12.73 -oN scan.nmap
 ```
 
+
 ![image](https://user-images.githubusercontent.com/114166939/226315146-a7b150ac-c319-4da5-afbd-5d66906843e8.png)
 
 Let's take a look on the website:
