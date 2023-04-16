@@ -1,5 +1,5 @@
 # Mr Robot - THM
-###  Difficulty level: Medium
+##  Difficulty level: Medium
 ------------------------------------------------------
 
 
