@@ -58,7 +58,9 @@ Click on upload:
 ![image](https://user-images.githubusercontent.com/114166939/233863161-33199fc6-50c1-40b9-a454-2f9e376e89b5.png)
 
 Caught the request! Now I'll send it to the repeater with ctrl + R,
+
 Because the image is empty added some strings,
+
 Click on send and the image uploaded:
 
 ![image](https://user-images.githubusercontent.com/114166939/233863419-2691fb6b-2bf0-4a95-832c-14830aaf7678.png)
