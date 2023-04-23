@@ -1,5 +1,5 @@
 # HTB - Precious
-##  Difficulty level: Easy
+###  Difficulty level: Easy
 ------------------------------------------------------
 
 For start, i'll run nmap scan on all ports of the machine:
