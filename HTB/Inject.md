@@ -75,7 +75,7 @@ On the response there is the html code:
 
 So if I want to view my image I need to approach this path "/show_image?img=empty.png", 
 
-Than I'll open "Proxy" again and I'll intercept a home request of the site:
+Then I'll open "Proxy" again and I'll intercept a home request of the site:
 
 ![image](https://user-images.githubusercontent.com/114166939/233961590-72eebbb2-722e-48d7-b770-d684bd907023.png)
 
