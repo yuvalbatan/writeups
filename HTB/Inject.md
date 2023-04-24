@@ -97,11 +97,11 @@ Let's add "../" to the request instead the "empty.png":
 
 Got the answer from the server, it is vulnerable to LFI!
 
-The server tell us it have the "java & resources & uploads" directories in the current location.
+The server tells us it has the "java & resources & uploads" directories in the current location.
 
 Let's manipulate the server to search for more information about itself and about its users.
 
-There is a realy important file here which can help us to gain access to the system:
+There is an important file here which can help us gain access to the system:
 
 "HELP.md" file located on "../../../HELP.md" which reveals that this web use "Spring-Boot" which has many vulnerabilities.
 
