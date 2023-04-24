@@ -89,7 +89,7 @@ Hit the send button and got "HTTP Status 500 – Internal Server Error":
 
 ![image](https://user-images.githubusercontent.com/114166939/233962647-8185e340-a03e-409b-a304-4cdf08160bfe.png)
 
-Probably the it can't display an empty image, I'll give it another value to check for LFI.
+Probably it can't display an empty image, I'll give it another value to check for LFI.
 
 Let's add "../" to the request instead the "empty.png":
 
