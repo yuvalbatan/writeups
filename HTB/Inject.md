@@ -20,7 +20,7 @@ PORT     STATE SERVICE     VERSION
 Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 ```
 
-This is a linux machine, there are 2 open services - web app on 8080 and ssh on 22.
+This is a Linux machine. There are 2 open services - a web app on 8080 and SSH on 22.
 
 I'll start with the web app service on port 8080 by testing its directories:
 ```bash
@@ -37,31 +37,33 @@ Results:
 /release_notes        (Status: 200) [Size: 1086]
 ```
 
-The most interesting is "/upload" directory, let's open it:
+The most interesting is the "/upload" directory.
+
+Let's open it:
 
 ![image](https://user-images.githubusercontent.com/114166939/233862706-dbd2a3ce-0356-4cb9-b0c2-990778ce6a91.png)
 
-I'll make an empty PNG file (so it won't take much time to upload it) with the command:
+I'll make an empty PNG file (so it won't take long to upload) with the command:
 ```bash
 touch empty.png
 ```
-Also, I'll power-up Foxy-Proxy tool:
+Also, I'll power-up the Foxy-Proxy tool to get a proxy on 127.0.0.1 port 8080 for Burp-Suite:
 
 ![image](https://user-images.githubusercontent.com/114166939/233863036-986a4feb-828f-4ebf-a77f-57eb4a614e9b.png)
 
-And open interception on Burp-Suite to examine the request:
+And open the "Proxy" tab and the "interception" on Burp-Suite to examine the request:
 
 ![image](https://user-images.githubusercontent.com/114166939/233863114-5ca16b2a-c330-4719-bf61-3ae0a0fac1d4.png)
 
-Click on upload:
+After clicking upload, I caught the request!
 
 ![image](https://user-images.githubusercontent.com/114166939/233863161-33199fc6-50c1-40b9-a454-2f9e376e89b5.png)
 
-Caught the request! Now I'll send it to the repeater with ctrl + R,
+Now I'll send it to the repeater with CTRL + R,
 
-Because the image is empty added some strings,
+Because the image is empty, I added some strings.
 
-Click on send and the image uploaded:
+Click on "send" and the image uploaded:
 
 ![image](https://user-images.githubusercontent.com/114166939/233863419-2691fb6b-2bf0-4a95-832c-14830aaf7678.png)
 
@@ -77,27 +79,34 @@ Than I'll open "Proxy" again and I'll intercept a home request of the site:
 
 ![image](https://user-images.githubusercontent.com/114166939/233961590-72eebbb2-722e-48d7-b770-d684bd907023.png)
 
-I got the request, hit: ctrl + R, to send to the "Repeater".
+I got the request!
+
+hit: ctrl + R, to send to the "Repeater".
+
 I'll try to get the "/show_image?img=empty.png" by adding it to the header:
 
 Hit the send button and got "HTTP Status 500 – Internal Server Error":
 
 ![image](https://user-images.githubusercontent.com/114166939/233962647-8185e340-a03e-409b-a304-4cdf08160bfe.png)
 
-Probably the it cand display an empty image, I'll give it another value to check for LFI,
+Probably the it can't display an empty image, I'll give it another value to check for LFI.
+
 Let's add "../" to the request instead the "empty.png":
 
 ![image](https://user-images.githubusercontent.com/114166939/233963489-7319a620-1e3d-4c87-b1bb-0dff6f356275.png)
 
 Got the answer from the server, it is vulnerable to LFI!
+
 The server tell us it have the "java & resources & uploads" directories in the current location.
 
 Let's manipulate the server to search for more information about itself and about its users.
 
 There is a realy important file here which can help us to gain access to the system:
+
 "HELP.md" file located on "../../../HELP.md" which reveals that this web use "Spring-Boot" which has many vulnerabilities.
 
 ![image](https://user-images.githubusercontent.com/114166939/233965718-a9f64dde-34de-4f4f-bbd8-9ea332848818.png)
+
 
 Let's open "Metasploit" tool:
 ```bash
@@ -125,7 +134,7 @@ Alright! let's see what options I need to configure:
 ```bash
 show options
 ```
-The main options I require to set are - "RHOSTS & RPORT & LHOST",
+The main options I require to set are: "RHOSTS & RPORT & LHOST",
 I'll set them with the commands:
 ```bash
 set RHOSTS 10.10.11.204
@@ -140,7 +149,7 @@ The current user is "frank":
 ![image](https://user-images.githubusercontent.com/114166939/233970537-b34017e1-2059-415d-a2be-3b16e8cb2bd1.png)
 
 
-In it's home directory in hidden directory called ".m2", I found a configuration file which contains a credentials of a user called "phil":
+In it's home directory, in a hidden directory called ".m2", I found a configuration file which contains a credentials of a user called "phil":
 ```bash
 cd .m2
 cat settings.xml
@@ -148,33 +157,35 @@ cat settings.xml
 
 ![image](https://user-images.githubusercontent.com/114166939/233971734-d8e8d102-8471-4ecb-9a08-bb6b61658d60.png)
 
-Only "phil" user can open the "user.txt" file which located on its home directory,
+Only "phil" user can open the "user.txt" file which located on its home directory.
+
 I'll switch to this user with the credentials I just found, 
-But first, I'll replace to regular shell from the meterpreter and than switch the user to "phil":
+But first, I'll replace to regular shell from the meterpreter and than switch to the user - "phil":
 
 ![image](https://user-images.githubusercontent.com/114166939/233973819-81bd1c5b-02d5-49ac-a47a-3b3f4e192d47.png)
 
-To upgrade the "sh" to "bash" I'll run the python command:
+To upgrade the "sh" to "bash" I'll run the python3 command:
 ```bash
 python3 -c 'import pty;pty.spawn("/bin/bash")'
 ```
 
 ![image](https://user-images.githubusercontent.com/114166939/233974548-b5de0e36-ded9-40d9-81e9-5939a29501fa.png)
 
-Now let's get the first flag:
+Now let's get the first flag (user.txt):
 
 ![image](https://user-images.githubusercontent.com/114166939/233975514-63937736-7723-4a76-9a4c-84dd8b272d50.png)
 
 Let's invesigate this user -
-It's not in the sudoers so it can't run sudo commands
+
+He is not in the sudoers group so he can't run sudo commands.
 
 ![image](https://user-images.githubusercontent.com/114166939/233976679-599040ae-a35e-4672-8ee5-e597d813d52b.png)
 
-He does belongs to the "staff" group, which is not default and he is the only member in it:
+He does belongs to the "staff" group, which is not a default group, and he is the only member in it:
 
 ![image](https://user-images.githubusercontent.com/114166939/233977220-a3dbba50-760c-4f41-9371-ceb3744b6666.png)
 
-Let's check what files or directories owned by this group:
+Let's check what files and directories owned by this group:
 ```bash
 find / -group staff 2>/dev/null
 ```
@@ -182,25 +193,26 @@ This search reveals many results:
 
 ![image](https://user-images.githubusercontent.com/114166939/233978100-22f2531c-7431-4cf9-b4b7-9482a3e41b67.png)
 
-There is one word which is repetitive, "ansible" which refers to infrastructure of environment, virtualized hosts and hypervisors.
+There is one word that is repeated, "ansible", which refers to the infrastructure of the environment, virtualized hosts, and hypervisors.
 
 Let's open the first directory - "/opt/automation/tasks":
 
 ![image](https://user-images.githubusercontent.com/114166939/233979248-84fcd3f8-54ae-4d76-993f-d9ddb1d6d3d7.png)
 
-It contains the "playbook_1.yml", quick search on google will lead us to find out that playbook is one of the core features of Ansible and tell Ansible what to execute,
-it is like a "to-do" list for ansible.
+It contains the "playbook_1.yml", a quick search on google will lead us to find out that playbook is one of the core features of Ansible and tells Ansible what to execute.
 
-As "phil" user I can't edit this file, but what I can do, is to add a playbook to this directory because this directory owned by "staff" group.
+It is like a "to-do" list for Ansible.
 
-Which means I can force the system to execute a command with root priveleges!
+As a "phil" user I can't edit this file, but what I can do is add a playbook to this directory because this directory is owned by the "staff" group.
+
+Which means I can force the system to execute a command with root privileges!
 
 I'll open a new file on my machine, I'll call it "playbook_2.yml":
 ```bash
 nano playbook_2.yml
 ```
 
-Now the command I want the system to run as root is:
+The command I want the system to run as root is:
 ```bash
 chmod u+s /bin/bash
 ```
@@ -232,12 +244,12 @@ Got the file!
 
 ![image](https://user-images.githubusercontent.com/114166939/233982989-9597389d-d22d-4518-9696-a01eae0baa45.png)
 
-Let's run the playbooks with the command:
+Let's run the playbooks on the victim machine with the command:
 ```bash
 ansible
 ```
 
-Now let's check if it worked:
+Now let's check if it works:
 ```bash
 ls -la /bin/bash
 ```
@@ -245,7 +257,8 @@ ls -la /bin/bash
 ![image](https://user-images.githubusercontent.com/114166939/233983300-88d3d9ca-5871-42ee-a2d1-c51df2911c3d.png)
 
 Got the 's' in the permissions!
-All left to do is to exploit the SUID vulnerability which can be found in "https://gtfobins.github.io/gtfobins/bash/" under the "SUID" title:
+
+All left to do is exploit the SUID vulnerability which can be found at "https://gtfobins.github.io/gtfobins/bash/" under the "SUID" title:
 
 ```bash
 /bin/bash -p
