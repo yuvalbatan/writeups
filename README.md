@@ -2,6 +2,6 @@
 
 Welcome to my writeups repository!
 
-In this repositroty im publishing an imformative writeups about CTF's from HackTheBox & TryHackMe platforms.
+This repository contains informative writeups about HackTheBox and TryHackMe CTF's.
 
-Stay tuned for new writeups!
+Stay tuned for upcoming writeups!
