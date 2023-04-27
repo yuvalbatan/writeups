@@ -1,7 +1,7 @@
-# Welcome
+# Writeups <a href="https://www.gautamkrishnar.com/"><img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="5%"></a>
 
-Welcome to my writeups repository,
+Welcome to my writeups repository!
 
-I'm publishing here imformative writeups from HackTheBox and TryHackMe platforms!
+In this repositroty im publishing an imformative writeups about CTF's from HackTheBox & TryHackMe platforms.
 
 Stay tuned for new writeups!
