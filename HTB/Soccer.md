@@ -406,7 +406,7 @@ Which means I am able to run the file "/usr/bin/dstat".
 
 I'll search for "dstat" at "https://gtfobins.github.io/":
 
-Under "dsata" category I found the following:
+Under "dstat" category I found the following:
 
 ![image](https://user-images.githubusercontent.com/114166939/236668296-4fe8f156-73fe-42a5-b972-343db2436184.png)
 
