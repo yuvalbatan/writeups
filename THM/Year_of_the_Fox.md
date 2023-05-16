@@ -46,6 +46,7 @@ Host script results:
 There are 3 open ports on this machine - 80 (HTTP) and 139 & 445 (SMB), also, this is a linux machine.
 
 I'll start with the http service:
+
 ![image](https://github.com/yuvalbatan/writeups/assets/114166939/7ea1de55-4d58-40aa-a30c-5715db5048de)
 
 
